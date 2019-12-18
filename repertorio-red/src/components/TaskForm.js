@@ -8,7 +8,7 @@ export default class TaskForm extends Component {
     }
 
     onSubmit = e => {
-        console.log(this.state);
+        this.props.addTask(this.state.title, this.state.description);
         e.preventDefault();
     }
 
@@ -28,7 +28,7 @@ export default class TaskForm extends Component {
                 value={this.state.title}/>
                 <br/>
                 <textarea placeholder="Write a Description" 
-                name = "textarea"
+                name = "description"
                 onChange={this.onChange} 
                 value={this.state.descrition}/>
                 <br/>

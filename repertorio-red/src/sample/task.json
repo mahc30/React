@@ -9,7 +9,7 @@
         "id": 2,
         "title": "task zwei",
         "description": "iorem ipsum",
-        "done": true
+        "done": false
     },
     {
         "id": 3,

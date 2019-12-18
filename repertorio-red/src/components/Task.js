@@ -9,15 +9,15 @@ class Task extends Component {
             textDecoration: this.props.e.done ? 'line-through' : 'none'
         }
     }
+
     render() {
 
         const { e } = this.props;
         return <div style={this.StyleCompleted()}>
             {e.title} -
             {e.description} -
-            {e.done.toString()}
-            <input type="checkbox" />
-            <button style={btnDelete}>
+            <input type="checkbox" onChange={this.props.checkDone.bind(this,e.id)}/>
+            <button style={btnDelete} onClick = {this.props.deleteTask.bind(this, e.id)}>
                 x
             </button>
         </div>
