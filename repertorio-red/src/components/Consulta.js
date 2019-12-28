@@ -1,117 +1,162 @@
 import React, { Component } from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import Typography from '@material-ui/core/Typography';
+import SearchIcon from '@material-ui/icons/Search';
+import Button from '@material-ui/core/Button';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 export default class Consulta extends Component {
+
+    state = {
+        checked: true
+    }
+
+    changeForm = () => {
+        this.setState({
+            checked: !this.state.checked
+        })
+    }
+
     render() {
-        return (
 
-            <div class="container-fluid h-100 bg-transparent">
-                <div
-                    class="row  h-25 justify-content-center align-items-center border border-dark shadow-lg bg-transparent rounded">
-                    <div class="col align-self-center text-center mb-3">
-                        <p class="h1"> Compositor</p>
-                    </div>
-                    <div class="col align-self-center text-center mb-3">
-                        <p class="h1"> Obras </p>
-                    </div>
-                </div>
-
-                <div
-                    class="row h-50 justify-content-center align-items-center bg-transparent border border-dark border border-dark shadow-lg bg-transparent rounded">
-                    <div class="col align-self-center text-center">
-
-                        <form method="POST" action="/table/compositor/avanzado">
-                            <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox"
-                                        onclick="var input = document.getElementById('activatorCompositor-Nombre'); if(this.checked){ input.disabled = false; input.focus();}else{input.disabled=true; input.value ='';}" />
-                                    <input disabled type="text" class="form-control ml-sm-2 pais" name="nombre"
-                                        id="activatorCompositor-Nombre" aria-describedby="helpId"
-                                        placeholder="Ejemplo: Daddy Yankee" />
-                                </div>
-                                <small id="helpId" class="form-text text-muted">Nombre</small>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox"
-                                        onclick="var input = document.getElementById('activatorCompositor-Pais'); if(this.checked){ input.disabled = false; input.focus();}else{input.disabled=true;}" />
-                                    <select disabled class="form-control ml-sm-2 pais" data-style="btn-info" name="pais"
-                                        id="activatorCompositor-Pais">
-                                        <option name="<% compositor[i].Pais%>"></option>
-                                    </select>
-                                </div>
-                                <small id="helpId" class="form-text text-muted">Pais</small>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox"
-                                        onclick="var input = document.getElementById('activatorCompositor-Periodo'); if(this.checked){ input.disabled = false; input.focus();}else{input.disabled=true;}" />
-                                    <select disabled class="form-control periodo ml-sm-2" data-style="btn-info" name="periodo"
-                                        id="activatorCompositor-Periodo">
-                                        <option name="<%= compositor[i].Periodo %>"></option>
-                                    </select>
-                                </div>
-                                <small id="helpId" class="form-text text-muted">Periodo</small>
-                            </div>
-
-                            <button type="submit" class="btn btn-info">Consultar Compositor</button>
-                        </form>
+        if (this.state.checked) {
+            return (
+                <form method="POST" action="/EDITAR COMPOSITOR">
+                    <Typography align="center" variant="h5">Compositor</Typography>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={this.state.checked}
+                                color="primary"
+                                onChange={this.changeForm}
+                            />
+                        }
+                    />
+                    <div class="form-group">
+                        <FormControl>
+                            <TextField id="filled-basic" label="Nombre" variant="filled" />
+                        </FormControl>
                     </div>
 
-                    <div class="col align-self-center text-center">
-                        <form method="POST" action="/table/obra/avanzado">
-                            <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox"
-                                        onclick="var input = document.getElementById('activatorObra-Compositor'); if(this.checked){ input.disabled = false; input.focus();}else{input.disabled=true;}" />
-                                    <select disabled class="form-control ml-sm-2 pais" class="slcomp" name="compositor"
-                                        id="activatorObra-Compositor">
-                                        <option name="<%= obra[i].ID %>"></option>
-                                    </select>
-                                </div>
-                                <small id="helpId" class="form-text text-muted">Compositor</small>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox"
-                                        onclick="var input = document.getElementById('activatorObra-Tonalidad'); if(this.checked){ input.disabled = false; input.focus();}else{input.disabled=true;}" />
-                                    <select disabled class="form-control ml-sm-2 pais" data-style="btn-info" name="tonalidad"
-                                        id="activatorObra-Tonalidad">
-                                        <option name=""></option>
-                                    </select>
-                                </div>
-                                <small id="helpId" class="form-text text-muted">Tonalidad</small>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <input type="checkbox"
-                                        onclick="var input = document.getElementById('activatorObra-Nivel'); if(this.checked){ input.disabled = false; input.focus();}else{input.disabled=true;}" />
-                                    <select disabled class="form-control ml-sm-2 pais" data-style="btn-info" name="nivel"
-                                        id="activatorObra-Nivel">
-                                        <option name="Orquesta">Orquesta</option>
-                                        <option name="Preorquesta">Preorquesta</option>
-                                        <option name="Semillero">Semillero</option>
-                                    </select>
-                                </div>
-                                <small id="helpId" class="form-text text-muted">Nivel</small>
-                            </div>
-                            <button type="submit" class="btn btn-info">Consultar Obras</button>
-                        </form>
+                    <div class="form-group">
+                        <FormControl>
+                            <InputLabel htmlFor="age-native-helper">Pais</InputLabel>
+                            <NativeSelect>
+                                <option value="" />
+                                <option value={10}>Ten</option>
+                                <option value={20}>Twenty</option>
+                                <option value={30}>Thirty</option>
+                            </NativeSelect>
+                        </FormControl>
                     </div>
-                </div>
 
-                <div
-                    class="row h-25 justify-content-center align-items-center border border-dark shadow-lg bg-transparent rounded">
-                    <div class="form-container text-right">
-                        <form method="GET" action="/">
-                            <button type="submit" class="btn btn-info">Home</button>
-                        </form>
+                    <div class="form-group">
+                        <FormControl>
+                            <InputLabel htmlFor="age-native-helper">Periodo</InputLabel>
+                            <NativeSelect>
+                                <option value="" />
+                                <option value={10}>Ten</option>
+                                <option value={20}>Twenty</option>
+                                <option value={30}>Thirty</option>
+                            </NativeSelect>
+                        </FormControl>
                     </div>
-                </div>
-            </div>
-        )
+
+                    <div class="form-group">
+                        <FormControl>
+                            <TextField id="outlined-basic" label="Descripción" variant="outlined" />
+                        </FormControl>
+                    </div>
+
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<SearchIcon />}
+                    >
+                        Buscar
+                    </Button>
+                </form>
+            )
+        } else {
+            return (
+                <form method="POST" action="/EDITAR COMPOSITOR">
+
+                    <Typography align="center" variant="h5">Obra</Typography>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={this.state.checked}
+                                color="primary"
+                                onChange={this.changeForm}
+                            />
+                        }
+                    />
+
+                    <div class="form-group">
+                        <FormControl>
+                            <TextField id="filled-basic" label="Nombre" variant="filled" />
+                        </FormControl>
+                    </div>
+
+                    <div class="form-group">
+                        <FormControl>
+                            <InputLabel htmlFor="age-native-helper">Compositor</InputLabel>
+                            <NativeSelect>
+                                <option value="" />
+                                <option value={10}>Ten</option>
+                                <option value={20}>Twenty</option>
+                                <option value={30}>Thirty</option>
+                            </NativeSelect>
+                        </FormControl>
+                    </div>
+
+                    <div class="form-group">
+                        <FormControl>
+                            <InputLabel htmlFor="age-native-helper">Tonalidad</InputLabel>
+                            <NativeSelect>
+                                <option value="" />
+                                <option value={10}>Ten</option>
+                                <option value={20}>Twenty</option>
+                                <option value={30}>Thirty</option>
+                            </NativeSelect>
+                        </FormControl>
+                    </div>
+
+                    <div class="form-group">
+                        <FormControl>
+                            <InputLabel htmlFor="age-native-helper">Nivel</InputLabel>
+                            <NativeSelect>
+                                <option value="" />
+                                <option value={10}>Semillero</option>
+                                <option value={20}>Preorquesta</option>
+                                <option value={30}>Orquesta</option>
+                            </NativeSelect>
+                        </FormControl>
+                    </div>
+
+                    <div class="form-group">
+                        <FormControl>
+                            <TextField id="outlined-basic" label="Descripción" variant="outlined" />
+                        </FormControl>
+                    </div>
+
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<SearchIcon />}
+                    >
+                        Buscar
+                    </Button>
+                </form>
+            )
+        }
+
     }
 }

@@ -59,9 +59,7 @@ class App extends Component {
 
   render() {
     return <div>
-
       <Router>
-
         <AppBar position="static">
           <Toolbar>
             <IconButton component={Link} to="/" color="primary" edge="start" color="inherit" aria-label="menu">
@@ -69,7 +67,6 @@ class App extends Component {
             </IconButton>
           </Toolbar>
         </AppBar>
-
 
         <Route exact path="/" render={() => {
           return <div>
