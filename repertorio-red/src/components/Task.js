@@ -11,7 +11,6 @@ class Task extends Component {
     }
 
     render() {
-
         const { e } = this.props;
         return <div style={this.StyleCompleted()}>
             {e.title} -

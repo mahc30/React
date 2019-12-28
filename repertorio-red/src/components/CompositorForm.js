@@ -3,9 +3,30 @@ import React, { Component } from 'react'
 export default class CompositorForm extends Component {
 
     state = {
-        msg: []
+        pais: [],
+        periodo: []
     }
 
+    async componentDidMount() {
+
+        fetch("/api/pais/*")
+        .then(res => {
+            return res.json()
+         })
+        .then(paises => { 
+            this.setState({ pais: paises })
+         });
+
+        fetch("/api/periodo/*")
+        .then(res => {
+            return res.json()
+         })
+        .then(periodos => { 
+            console.log(periodos); 
+            this.setState({ periodo: periodos })
+         });
+
+    }
     
     render() {
         return (
@@ -28,21 +49,37 @@ export default class CompositorForm extends Component {
                             </div>
 
                             <div className="form-group">
-                                <select className="form-control pais" data-style="btn-info" name="pais">
-                                    <option name="<% paises[i].ID %>"></option>
+                                <select className="form-control pais" data-style="btn-info" name="pais" onChange={this.handleChange}>
+                                    {
+                                        this.state.pais.map(e => {
+                                            return ( <option key={e.ID}>
+                                                {e.Pais}
+                                            </option>
+
+                                            )
+                                        })
+                                    }
                                 </select>
                                 <small id="helpId" className="form-text text-muted">Pais</small>
                             </div>
 
                             <div className="form-group">
-                                <select className="form-control periodo" data-style="btn-info" name="periodo">
-                                    <option name="<% periodos[i].ID %>"></option>
+                                <select className="form-control periodo" data-style="btn-info" name="periodo" onChange={this.handleChange}>
+                                {
+                                        this.state.periodo.map(e => {
+                                            return ( <option key={e.ID}>
+                                                {e.Periodo}
+                                            </option>
+
+                                            )
+                                        }) 
+                                }
                                 </select>
                                 <small id="helpId" className="form-text text-muted">Periodo</small>
                             </div>
 
                             <div className="form-group text-center">
-                                <label for="comment">Descripción:</label>
+                                <label htmlFor="comment">Descripción:</label>
                                 <textarea className="form-control" rows="5" id="descripcion" name="descripcion" placeholder="O Fortuna
 velut luna,
 statu variabilis,

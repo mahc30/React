@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-
 import './App.css';
 
 import tasks from './sample/task.json';
@@ -12,6 +11,14 @@ import Posts from './components/Posts'
 import CompositorForm from './components/CompositorForm';
 import ObraForm from './components/ObraForm';
 import Consulta from './components/Consulta';
+import TablaCompositor from './components/TablaCompositor'
+import TablaObra from './components/TablaObra'
+import Button from '@material-ui/core/Button';
+
+import IconButton from '@material-ui/core/IconButton';
+import AppBar from '@material-ui/core/AppBar';
+import HomeIcon from '@material-ui/icons/Home';
+import Toolbar from '@material-ui/core/Toolbar';
 
 class App extends Component {
 
@@ -49,12 +56,21 @@ class App extends Component {
     this.setState({ tasks: newTasks })
   }
 
+
   render() {
     return <div>
 
       <Router>
-        <Link to="/">Home</Link>
-        <Link to="/posts">Posts</Link>
+
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton component={Link} to="/" color="primary" edge="start" color="inherit" aria-label="menu">
+              <HomeIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+
+
         <Route exact path="/" render={() => {
           return <div>
             <TaskForm addTask={this.addTask} />
@@ -68,10 +84,11 @@ class App extends Component {
         </Route>
 
         <Route path="/posts" component={Posts} />
-
-        <Route path="/add/compositor" component={CompositorForm}/>
-        <Route path="/add/obra" component={ObraForm}/>
-        <Route path="/consulta" component={Consulta}/>
+        <Route path="/add/compositor" component={CompositorForm} />
+        <Route path="/add/obra" component={ObraForm} />
+        <Route path="/consulta" component={Consulta} />
+        <Route path="/tabla/compositor" component={TablaCompositor} />
+        <Route path="/tabla/obra" component={TablaObra} />
       </Router>
     </div>
   }
