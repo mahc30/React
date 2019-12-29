@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
 import {Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
+import { Typography } from '@material-ui/core';
 
 export default class CompositorForm extends Component {
 
     state = {
         pais: [],
-        periodo: []
+        periodo: [],
+        compositor: "NA",
+        paisopt: "Afghanistan",
+        periodoopt: "Antiguo",
+        descripcion: ""
     }
 
     async componentDidMount() {
@@ -30,6 +36,23 @@ export default class CompositorForm extends Component {
 
     }
     
+    onChange = e => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+
+    sendData = () => {
+        let data = {
+            compositor: this.state.compositor,
+            pais: this.state.paisopt,
+            periodo: this.state.periodoopt,
+            descripcion: this.state.descripcion
+        }
+
+        axios.post("http://localhost:3001/api/post/add/compositor", JSON.stringify(data));
+        console.log("Axios'ed");
+    }
     render() {
         return (
             <div className="container-fluid h-100">
@@ -38,20 +61,20 @@ export default class CompositorForm extends Component {
                         <form method="POST" action="/agregar/compositor">
                             <div className="form-group">
                                 <div className="col align-self-center text-center">
-                                    <p className="h3"> Agregar Compositor </p>
+                                    <Typography variant="h5"> Agregar Compositor </Typography>
                                 </div>
                             </div>
 
                             <div className="form-group">
                                 <div className="align-self-center">
                                     <input type="text" className="form-control" name="nombre" id="inst-name"
-                                        aria-describedby="helpId" placeholder="Daddy Yankee" required="required" />
+                                        aria-describedby="helpId" placeholder="Daddy Yankee" required="required" onChange={this.onChange}/>
                                     <small id="helpId" className="form-text text-muted">Nombre</small>
                                 </div>
                             </div>
 
                             <div className="form-group">
-                                <select className="form-control pais" data-style="btn-info" name="pais" onChange={this.handleChange}>
+                                <select className="form-control pais" data-style="btn-info" name="paisopt" onChange={this.onChange}>
                                     {
                                         this.state.pais.map(e => {
                                             return ( <option key={e.ID}>
@@ -65,10 +88,10 @@ export default class CompositorForm extends Component {
                             </div>
 
                             <div className="form-group">
-                                <select className="form-control periodo" data-style="btn-info" name="periodo" onChange={this.handleChange}>
+                                <select className="form-control periodo" data-style="btn-info" name="periodoopt" onChange={this.onChange}>
                                 {
                                         this.state.periodo.map(e => {
-                                            return ( <option key={e.ID}>
+                                            return ( <option key={e.ID} value={e.Periodo}>
                                                 {e.Periodo}
                                             </option>
 
@@ -81,15 +104,25 @@ export default class CompositorForm extends Component {
 
                             <div className="form-group text-center">
                                 <label htmlFor="comment">Descripción:</label>
-                                <textarea className="form-control" rows="5" id="descripcion" name="descripcion" placeholder="O Fortuna
-velut luna,
-statu variabilis,
-semper crescis
-aut decrescis;"></textarea>
+                                <textarea 
+                                className="form-control" 
+                                rows="5" 
+                                id="descripcion" 
+                                name="descripcion" 
+                                placeholder="O Fortuna
+                                            velut luna,
+                                            statu variabilis,
+                                            semper crescis
+                                            aut decrescis;"
+                                onChange={this.onChange}/>
                             </div>
 
                             <div className="form-group text-center">
-                            <Button variant="contained" className="bg-success text-white" component="span">
+                            <Button 
+                            variant="contained" 
+                            className="bg-success text-white" 
+                            component="span"
+                            onClick={this.sendData}>
                               Agregar
                             </Button>
                             </div>
