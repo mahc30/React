@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import {Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 
 export default class ObraForm extends Component {
 
@@ -10,23 +12,23 @@ export default class ObraForm extends Component {
     async componentDidMount() {
 
         fetch("/api/compositor/*")
-        .then(res => {
-            return res.json()
-         })
-        .then(compositor => { 
-            this.setState({ compositor: compositor })
-         });
+            .then(res => {
+                return res.json()
+            })
+            .then(compositor => {
+                this.setState({ compositor: compositor })
+            });
 
         fetch("/api/tonalidad/*")
-        .then(res => {
-            return res.json()
-         })
-        .then(tonalidad => { 
-            this.setState({ tonalidad: tonalidad })
-         });
+            .then(res => {
+                return res.json()
+            })
+            .then(tonalidad => {
+                this.setState({ tonalidad: tonalidad })
+            });
 
     }
-    
+
     render() {
         return (
             <div className="container-fluid h-100">
@@ -52,9 +54,9 @@ export default class ObraForm extends Component {
                                 <select className="form-control" data-style="btn-info" name="compositor" onChange={this.handleChange}>
                                     {
                                         this.state.compositor.map(e => {
-                                            return(<option key={e.ID}>
+                                            return (<option key={e.ID}>
                                                 {e.Compositor}
-                                                </option>
+                                            </option>
                                             )
                                         })
                                     }
@@ -66,7 +68,7 @@ export default class ObraForm extends Component {
                                 <select className="form-control" data-style="btn-info" name="tonalidad" onChange={this.handleChange}>
                                     {
                                         this.state.tonalidad.map(e => {
-                                            return(
+                                            return (
                                                 <option name={e.ID}>
                                                     {e.Tonalidad}
                                                 </option>
@@ -88,24 +90,30 @@ export default class ObraForm extends Component {
 
                             <div className="form-check text-center">
                                 <label className="form-check-label">
-                                    <input name="esArreglo" type="checkbox" className="form-check-input"/>
+                                    <input name="esArreglo" type="checkbox" className="form-check-input" />
                                 </label>
                                 <small id="helpId" className="form-text text-muted pt-2">Es arreglo</small>
                             </div>
 
 
                             <div className="form-group text-center">
-                                <button type="submit" className="btn btn-primary">Agregar</button>
+                                <Button variant="contained" className="bg-success text-white" component="span">
+                                    Agregar
+                            </Button>
                             </div>
-
                         </form>
 
-                        <form method="GET" action="/">
-                            <button type="submit" className="btn btn-info">Home</button>
-                        </form>
+                        <div className="form-container text-right">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                component={Link} to="/">
+                                Home
+                         </Button>
+                        </div>
                     </div>
                 </div>
             </div>
         )
-    }x
+    } x
 }

@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import {Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 
 export default class CompositorForm extends Component {
 
@@ -55,7 +57,6 @@ export default class CompositorForm extends Component {
                                             return ( <option key={e.ID}>
                                                 {e.Pais}
                                             </option>
-
                                             )
                                         })
                                     }
@@ -88,14 +89,19 @@ aut decrescis;"></textarea>
                             </div>
 
                             <div className="form-group text-center">
-                                <button type="submit" className="btn btn-primary">Agregar</button>
+                            <Button variant="contained" className="bg-success text-white" component="span">
+                              Agregar
+                            </Button>
                             </div>
                         </form>
 
                         <div className="form-container text-right">
-                            <form method="GET" action="/">
-                                <button type="submit" className="btn btn-info">Home</button>
-                            </form>
+                            <Button 
+                            variant="contained" 
+                            color="primary" 
+                            component={Link} to = "/"> 
+                            Home
+                         </Button>
                         </div>
                     </div>
                 </div>
