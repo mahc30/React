@@ -14,11 +14,24 @@ import IconButton from '@material-ui/core/IconButton';
 export default class TablaObra extends Component {
 
   state = {
-    apiInfo: []
+    apiInfo: [],
+    nombre: "*",
+    compositor: "*",
+    tonalidad: "*",
+    nivel: "Semillero",
+    esArreglo: false
   }
 
   componentDidMount = () => {
-    fetch("http://localhost:3001/api/obra/*")
+
+    let params = this.props.match.params;
+    let nombre = params.nombre;
+    let compositor = params.compositor;
+    let tonalidad = params.tonalidad;
+    let nivel = params.nivel;
+    let esArreglo = params.esArreglo;
+
+    fetch(`http://localhost:3001/api/obra/${nombre}/${compositor}/${tonalidad}/${nivel}/${esArreglo}`)
       .then((response) => {
         return response.json();
       })

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,11 +13,17 @@ import IconButton from '@material-ui/core/IconButton';
 export default class TablaCompositor extends Component {
 
   state = {
-    apiInfo: []
+    apiInfo: [],
   }
 
   componentDidMount = () => {
-    fetch("http://localhost:3001/api/compositor/*")
+
+    let params = this.props.match.params;
+    let nombre = params.nombre || "*";
+    let pais =  params.pais || "*";
+    let periodo = params.periodo || "*";
+
+    fetch(`http://localhost:3001/api/compositor/${nombre}/${pais}/${periodo}`)
       .then((response) => {
         return response.json();
       })
@@ -30,7 +35,6 @@ export default class TablaCompositor extends Component {
         });
 
         this.setState({ apiInfo: apei });
-        console.log(jsonStr);
       });
   }
 
@@ -45,6 +49,7 @@ export default class TablaCompositor extends Component {
     this.setState({
       apiInfo: newRows
     })
+    console.log(this.state)
   }
 
   render() {

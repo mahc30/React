@@ -51,7 +51,6 @@ export default class ObraForm extends Component {
                 [e.target.name]: e.target.value
             })
         }
-        console.log(this.state);
     }
 
     sendData = () => {

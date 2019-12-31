@@ -13,7 +13,9 @@ import ObraForm from './components/ObraForm';
 import Consulta from './components/Consulta';
 import TablaCompositor from './components/TablaCompositor'
 import TablaObra from './components/TablaObra'
+import addForm from './components/AddForm'
 
+// ------------------- Material UI imports --------------------
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
@@ -104,25 +106,14 @@ class App extends Component {
                 </div>
 
                 <div className="row rounded shadow">
-                  <div className="col-3 text-center p-3 border border-dark">
+                  <div className="col-6 text-center p-3 border border-dark">
                     <Button
                       variant="contained"
                       color="primary"
                       startIcon={<PersonIcon />}
-                      component={Link} to="/add/Compositor"
+                      component={Link} to="/add"
                     >
-                      Compositor
-                    </Button>
-                  </div>
-
-                  <div className="col-3 text-center p-3 border border-dark border-left-0">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      startIcon={< MusicNoteIcon />}
-                      component={Link} to="/add/Obra"
-                    >
-                      Obra
+                      Obras / Compositores
                     </Button>
                   </div>
 
@@ -146,11 +137,10 @@ class App extends Component {
         </Route>
 
         <Route path="/posts" component={Posts} />
-        <Route path="/add/compositor" component={CompositorForm} />
-        <Route path="/add/obra" component={ObraForm} />
+        <Route path="/add" component={addForm} />
         <Route path="/consulta" component={Consulta} />
-        <Route path="/tabla/compositor" component={TablaCompositor} />
-        <Route path="/tabla/obra" component={TablaObra} />
+        <Route path="/tabla/compositor/:nombre/:pais/:periodo" component={TablaCompositor} />
+        <Route path="/tabla/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo" component={TablaObra} />
       </Router>
     </div >
   }

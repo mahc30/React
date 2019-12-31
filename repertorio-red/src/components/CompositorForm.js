@@ -51,13 +51,12 @@ export default class CompositorForm extends Component {
         }
 
         axios.post("http://localhost:3001/api/post/add/compositor", JSON.stringify(data));
-        console.log("Axios'ed");
     }
+
     render() {
         return (
             <div className="container-fluid h-100">
-                <div className="row justify-content-center align-items-center h-100">
-                    <div className="col col-sm-6 col-md-6 col-lg-4 col-xl-3 border border-dark form-container shadow-lg p-3 mb-5 bg-white rounded bg-transparent">
+            <div className=" mx-auto col col-sm-6 col-md-6 col-lg-4 col-xl-3 border border-dark form-container rounded shadow p-3 mb-5 bg-white rounded bg-transparent">               
                         <form method="POST" action="/agregar/compositor">
                             <div className="form-group">
                                 <div className="col align-self-center text-center">
@@ -136,9 +135,8 @@ export default class CompositorForm extends Component {
                             Home
                          </Button>
                         </div>
-                    </div>
-                </div>
             </div>
+        </div>
         )
     }
 }

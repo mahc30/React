@@ -1,20 +1,11 @@
 import React, { Component } from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import Typography from '@material-ui/core/Typography';
-import SearchIcon from '@material-ui/icons/Search';
-import Button from '@material-ui/core/Button';
+import ObraForm from './ObraForm'
+import CompositorForm from './CompositorForm'
+
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import ConsultaObraForm from './ConsultaObraForm';
-import ConsultaCompositorForm from './ConsultaCompositorForm'
-export default class Consulta extends Component {
+export default class AddForm extends Component {
 
     state = {
         checked: true
@@ -27,6 +18,7 @@ export default class Consulta extends Component {
     }
 
     render() {
+
         if (this.state.checked) {
             return (
                 <div>
@@ -39,7 +31,7 @@ export default class Consulta extends Component {
                             />
                         }
                     />
-                    <ConsultaObraForm />
+                    <ObraForm />
                 </div>
             )
         } else {
@@ -54,7 +46,7 @@ export default class Consulta extends Component {
                             />
                         }
                     />
-                    <ConsultaCompositorForm/>
+                    <CompositorForm />
                 </div>
             )
         }

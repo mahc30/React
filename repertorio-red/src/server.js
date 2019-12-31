@@ -53,13 +53,45 @@ app.get("/api/:table/:column", (req, res) => {
     });
 });
 
-app.get("/api/compositor", (req, res) => {
+app.get("/api/compositor/:nombre/:pais/:periodo", (req, res) => {
+
+    let nombre = req.params.nombre || "*";
+    let pais = req.params.pais || "*";
+    let periodo = req.params.periodo || "*";
 
 
-    let sql = 'SELECT compositor.*, pais.Pais, periodo.Periodo \
+    let sql = "SELECT compositor.*, pais.Pais, periodo.Periodo \
     FROM compositor \
     INNER JOIN pais ON compositor.Pais = pais.ID \
-    INNER JOIN periodo ON compositor.Periodo = periodo.ID';
+    INNER JOIN periodo ON compositor.Periodo = periodo.ID \
+    WHERE ";
+
+    let c = 0;
+
+    if (nombre !== "*") {
+        sql += `compositor.Compositor = '${nombre}'`
+        c++;
+    }
+
+    if (pais !== "*") {
+        if (c !== 0) {
+            sql += " AND "
+        }
+        c++;
+        sql += `pais.ID = ${pais}`
+    }
+
+    if (periodo !== "*") {
+        if (c !== 0) {
+            sql += " AND "
+        }
+        c++;
+        sql += `periodo.ID = ${periodo}`
+    }
+
+    if (c === 0) {
+        sql = sql.substring(0, sql.length - 6);
+    }
 
     db.query(sql, (err, result) => {
         if (err) {
@@ -68,7 +100,69 @@ app.get("/api/compositor", (req, res) => {
         }
 
         let parsedData = JSON.stringify(result);
-        console.log(parsedData)
+        res.send(parsedData);
+    });
+});
+
+app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res) => {
+
+    let nombre = req.params.nombre || "*";
+    let compositor = req.params.compositor || "*";
+    let tonalidad = req.params.tonalidad || "*";
+    let nivel = req.params.nivel || "*";
+    let esArreglo = req.params.esArreglo === "false" ? 0 : 1;
+
+    let sql = "SELECT obra.*, tonalidad.Tonalidad, compositor.Compositor \
+    FROM obra \
+    INNER JOIN compositor ON compositor.ID = obra.Compositor \
+    INNER JOIN tonalidad ON tonalidad.ID = obra.Tonalidad \
+    WHERE "
+
+    let c = 0;
+
+    if (nombre !== "*") {
+        sql += `obra.Obra = '${nombre}'`
+        c++;
+    } 
+    
+    if (compositor !== "*") {
+        if (c !== 0) {
+            sql += " AND "
+        }
+        c++;
+        sql += `compositor.ID = ${compositor}`
+    }
+    
+    if (tonalidad !== "*") {
+        if (c !== 0) {
+            sql += " AND "
+        }
+        c++;
+        sql += `tonalidad.ID = ${tonalidad}`
+    } 
+    
+    if (nivel !== "*") {
+        if (c !== 0) {
+            sql += " AND "
+        }
+        c++;
+        sql += `obra.nivel = '${nivel}'`
+    }
+
+    if (c !== 0) {
+        sql += " AND "
+    }
+
+    sql += `obra.esArreglo = ${esArreglo}`
+
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        console.log(sql);
+        let parsedData = JSON.stringify(result);
         res.send(parsedData);
     });
 });
@@ -86,7 +180,7 @@ app.post("/api/post/add/obra", (req, res) => {
 
     let sql1 = `SELECT ID FROM compositor WHERE compositor = '${compositor}'`;
     let sql2 = `SELECT ID FROM tonalidad WHERE tonalidad = '${tonalidad}'`;
-    
+
     db.query(`${sql1}; ${sql2}`, (err, result) => {
         if (err) {
             console.log(err);
