@@ -8,7 +8,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 export default class AddForm extends Component {
 
     state = {
-        checked: true
+        id: this.props.match.params.id,
+        type: this.props.match.params.type === "true" ? true : false,
+        checked: this.props.match.params.checked === "true" ? true: false
+    }
+
+    componentDidUpdate = () => {
+        console.log(this.state);
     }
 
     changeForm = () => {
@@ -17,39 +23,29 @@ export default class AddForm extends Component {
         })
     }
 
-    render() {
+    unHistory = () => {
 
-        if (this.state.checked) {
-            return (
-                <div>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={this.state.checked}
-                                color="primary"
-                                onChange={this.changeForm}
-                            />
-                        }
-                    />
-                    <ObraForm />
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={this.state.checked}
-                                color="primary"
-                                onChange={this.changeForm}
-                            />
-                        }
-                    />
-                    <CompositorForm />
-                </div>
-            )
+        if(this.state.checked){
+            this.props.history.push("/tabla/obra/*/*/*/*/*");
+        }else{
+            this.props.history.push("/tabla/compositor/*/*/*");
         }
+    }
 
+    render() {
+        return (
+            <div>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={this.state.checked}
+                            color="primary"
+                            onChange={this.changeForm}
+                        />
+                    }
+                />
+                {this.state.checked ? <ObraForm type={this.state.type} id={this.state.id} unHistory = {this.unHistory}/> : <CompositorForm type={this.state.type} id={this.state.id} unHistory = {this.unHistory}/>}
+            </div>
+        )
     }
 }

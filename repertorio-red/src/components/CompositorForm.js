@@ -7,6 +7,7 @@ import { Typography } from '@material-ui/core';
 export default class CompositorForm extends Component {
 
     state = {
+        type: this.props.type,
         pais: [],
         periodo: [],
         compositor: "NA",
@@ -50,7 +51,13 @@ export default class CompositorForm extends Component {
             descripcion: this.state.descripcion
         }
 
-        axios.post("http://localhost:3001/api/post/add/compositor", JSON.stringify(data));
+        if(this.state.type){
+            axios.post("http://localhost:3001/api/post/add/compositor", JSON.stringify(data));
+        }else{
+            axios.post(`http://localhost:3001/api/edit/compositor/${this.props.id}`, JSON.stringify(data));
+        }
+
+        this.props.unHistory();
     }
 
     render() {
@@ -60,13 +67,13 @@ export default class CompositorForm extends Component {
                         <form method="POST" action="/agregar/compositor">
                             <div className="form-group">
                                 <div className="col align-self-center text-center">
-                                    <Typography variant="h5"> Agregar Compositor </Typography>
+                                    <Typography variant="h5"> {this.state.type? "Agregar " : "Actualizar "} Compositor</Typography>
                                 </div>
                             </div>
 
                             <div className="form-group">
                                 <div className="align-self-center">
-                                    <input type="text" className="form-control" name="nombre" id="inst-name"
+                                    <input type="text" className="form-control" name="compositor" id="inst-name"
                                         aria-describedby="helpId" placeholder="Daddy Yankee" required="required" onChange={this.onChange}/>
                                     <small id="helpId" className="form-text text-muted">Nombre</small>
                                 </div>
@@ -122,7 +129,7 @@ export default class CompositorForm extends Component {
                             className="bg-success text-white" 
                             component="span"
                             onClick={this.sendData}>
-                              Agregar
+                              {this.state.type? "Agregar" : "Actualizar"}
                             </Button>
                             </div>
                         </form>

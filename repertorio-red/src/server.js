@@ -59,7 +59,6 @@ app.get("/api/compositor/:nombre/:pais/:periodo", (req, res) => {
     let pais = req.params.pais || "*";
     let periodo = req.params.periodo || "*";
 
-
     let sql = "SELECT compositor.*, pais.Pais, periodo.Periodo \
     FROM compositor \
     INNER JOIN pais ON compositor.Pais = pais.ID \
@@ -110,7 +109,15 @@ app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res)
     let compositor = req.params.compositor || "*";
     let tonalidad = req.params.tonalidad || "*";
     let nivel = req.params.nivel || "*";
-    let esArreglo = req.params.esArreglo === "false" ? 0 : 1;
+    let esArreglo = req.params.esArreglo;
+
+    if (esArreglo === "false") {
+        esArreglo = 0;
+    } else if (esArreglo === "true") {
+        esArreglo = 1;
+    } else {
+        esArreglo = "*"
+    }
 
     let sql = "SELECT obra.*, tonalidad.Tonalidad, compositor.Compositor \
     FROM obra \
@@ -123,8 +130,8 @@ app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res)
     if (nombre !== "*") {
         sql += `obra.Obra = '${nombre}'`
         c++;
-    } 
-    
+    }
+
     if (compositor !== "*") {
         if (c !== 0) {
             sql += " AND "
@@ -132,15 +139,15 @@ app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res)
         c++;
         sql += `compositor.ID = ${compositor}`
     }
-    
+
     if (tonalidad !== "*") {
         if (c !== 0) {
             sql += " AND "
         }
         c++;
         sql += `tonalidad.ID = ${tonalidad}`
-    } 
-    
+    }
+
     if (nivel !== "*") {
         if (c !== 0) {
             sql += " AND "
@@ -149,11 +156,11 @@ app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res)
         sql += `obra.nivel = '${nivel}'`
     }
 
-    if (c !== 0) {
-        sql += " AND "
+    if(esArreglo !== "*"){
+        sql += `obra.esArreglo = '${esArreglo}'`
+    }else{
+        sql = sql.substring(0, sql.length - 6);
     }
-
-    sql += `obra.esArreglo = ${esArreglo}`
 
     db.query(sql, (err, result) => {
         if (err) {
@@ -161,7 +168,6 @@ app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res)
             return;
         }
 
-        console.log(sql);
         let parsedData = JSON.stringify(result);
         res.send(parsedData);
     });
@@ -169,6 +175,8 @@ app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res)
 
 
 // ---------------------------- HANDLE POST REQUESTS ----------------------------
+
+// --------------- ADD REG REQUESTS ---------------------
 
 app.post("/api/post/add/obra", (req, res) => {
     console.log(req.body);
@@ -240,3 +248,136 @@ app.post("/api/post/add/compositor", (req, res) => {
         });
     });
 });
+
+// -------------------- DEL REG REQUESTS -------------------------------------
+
+app.post("/api/:table/del/:id", (req, res) => {
+
+    let id = req.params.id;
+    let table = req.params.table;
+    console.log(req.params)
+    let sql;
+
+    //Si es una Obra hay que eliminar la carpeta en la que está el PDF
+    if (table === "obra") {
+
+        sql = `SELECT Obra, Nivel FROM obra WHERE ID = ${id} `;
+        console.log(sql);
+        db.query(sql, (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            console.log(result);
+            let dir = `./Obras/${result[0].Nivel}/${result[0].Obra}`;
+
+            console.log(dir);
+
+            deleteFolderRecursive(dir);
+        })
+    }
+
+    sql = `DELETE FROM ${table} WHERE ID = '${id}'`;
+
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        res.sendStatus(500);
+    });
+});
+
+// ------------------ EDIT REG REQUESTS ------------------
+
+app.post("/api/edit/obra/:id", (req, res) => {
+    
+    let id = req.params.id;
+
+    let sql1 = `SELECT ID FROM compositor WHERE Compositor = '${req.body.compositor}'`;
+    let sql2 = `SELECT ID FROM tonalidad WHERE Tonalidad = '${req.body.tonalidad}'`;
+    let sql = sql1 + " ; " + sql2;
+
+    let esArreglo;
+
+    req.body.esArreglo ? esArreglo = 1 : esArreglo = 0;
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        let data = {
+            Obra: req.body.nombre,
+            Compositor: result[0][0].ID,
+            Tonalidad: result[1][0].ID,
+            Nivel: req.body.nivel,
+            esArreglo: esArreglo
+        }
+
+        sql = `UPDATE obra SET ? WHERE ID = ${id} `;
+
+        db.query(sql, data, (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            res.sendStatus(500);
+        });
+    });
+})
+
+app.post("/api/edit/compositor/:id", (req, res) => {
+    let id = req.params.id;
+    let pais = req.body.pais;
+    let periodo = req.body.periodo;
+
+    let sql1 = `SELECT ID FROM pais WHERE Pais = '${pais}'`;
+    let sql2 = `SELECT ID FROM periodo WHERE Periodo = '${periodo}'`;
+    let sql = sql1 + " ; " + sql2;
+
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        let data = {
+            Compositor: req.body.compositor,
+            Pais: result[0][0].ID,
+            Periodo: result[1][0].ID,
+            Descripcion: req.body.descripcion
+        }
+
+        sql = `UPDATE compositor SET ? WHERE ID = ${id} `;
+
+        db.query(sql, data, (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            res.sendStatus(500);
+        });
+    });
+});
+// ---------------- Funciones Varias --------------------
+
+//FIle System
+
+const deleteFolderRecursive = function (path) {
+    if (fs.existsSync(path)) {
+        fs.readdirSync(path).forEach((file, index) => {
+            const curPath = Path.join(path, file);
+            if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+};

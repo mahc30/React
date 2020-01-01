@@ -111,7 +111,7 @@ class App extends Component {
                       variant="contained"
                       color="primary"
                       startIcon={<PersonIcon />}
-                      component={Link} to="/add"
+                      component={Link} to="/add/true/*"
                     >
                       Obras / Compositores
                     </Button>
@@ -137,7 +137,7 @@ class App extends Component {
         </Route>
 
         <Route path="/posts" component={Posts} />
-        <Route path="/add" component={addForm} />
+        <Route path="/add/:checked/:type/:id" component={addForm} />
         <Route path="/consulta" component={Consulta} />
         <Route path="/tabla/compositor/:nombre/:pais/:periodo" component={TablaCompositor} />
         <Route path="/tabla/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo" component={TablaObra} />

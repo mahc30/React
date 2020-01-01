@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,6 +12,9 @@ import Paper from '@material-ui/core/Paper';
 import EditSharpIcon from '@material-ui/icons/EditSharp';
 import DeleteForeverSharpIcon from '@material-ui/icons/DeleteForeverSharp';
 import IconButton from '@material-ui/core/IconButton';
+import SearchIcon from '@material-ui/icons/Search';
+import Button from '@material-ui/core/Button';
+import Axios from 'axios';
 
 export default class TablaCompositor extends Component {
 
@@ -20,7 +26,7 @@ export default class TablaCompositor extends Component {
 
     let params = this.props.match.params;
     let nombre = params.nombre || "*";
-    let pais =  params.pais || "*";
+    let pais = params.pais || "*";
     let periodo = params.periodo || "*";
 
     fetch(`http://localhost:3001/api/compositor/${nombre}/${pais}/${periodo}`)
@@ -38,18 +44,19 @@ export default class TablaCompositor extends Component {
       });
   }
 
-  
+
   editRow = id => {
-    //TODO redirect to Edit Composer 
+    this.props.history.push(`/add/false/false/${id}`);
   }
 
   delRow = id => {
-    const newRows= this.state.apiInfo.filter(e => e.ID !== id);
+    const newRows = this.state.apiInfo.filter(e => e.ID !== id);
     console.log("filtering")
     this.setState({
       apiInfo: newRows
     })
-    console.log(this.state)
+    
+    axios.post(`http://localhost:3001/api/compositor/del/${id}`)
   }
 
   render() {
@@ -64,7 +71,16 @@ export default class TablaCompositor extends Component {
               <TableCell align="center">Periodo</TableCell>
               <TableCell align="center">Descripción</TableCell>
               <TableCell align="right"></TableCell>
-              <TableCell align="right"></TableCell>
+              <TableCell align="right">
+                <Button
+                  variant="contained"
+                  startIcon={<SearchIcon />}
+                  component={Link} to={`/consulta`}
+                  className="bg-success"
+                >
+                  Consulta
+                              </Button>
+              </TableCell>
             </TableRow>
           </TableHead>
 

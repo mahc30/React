@@ -15,29 +15,39 @@ export default class ConsultaObraForm extends Component {
 
     //TODO: Redirect to Tables according to parameters
     state = {
-        compositor: [],
-        tonalidad: [],
+        compositor: [""],
+        tonalidad: [""],
         nombre: "*",
         compositoropt: "*",
         tonalidadopt: "*",
         nivel: "*",
-        esArreglo: false
+        esArreglo: "*"
     }
 
     componentDidMount = () => {
 
-        let data = {}
+        let data = [{}];
         axios.get("http://localhost:3001/api/compositor/*")
             .then(res => {
+                res.data.forEach(element => {
+                    data = [...data, element];
+                });
+                
                 this.setState({
-                    compositor: res.data
+                    compositor: data
                 })
+
             })
 
+            let data_1 = [{}]
         axios.get("http://localhost:3001/api/tonalidad/*")
             .then(res => {
+                res.data.forEach(element => {
+                    data_1 = [...data_1, element];
+                });
+
                 this.setState({
-                    tonalidad: res.data
+                    tonalidad: data_1
                 })
             })
     }
@@ -47,6 +57,8 @@ export default class ConsultaObraForm extends Component {
             this.setState({
                 esArreglo: !this.state.esArreglo
             })
+
+            console.log(e.target)
         }
         else {
             this.setState({
@@ -59,9 +71,12 @@ export default class ConsultaObraForm extends Component {
     render() {
         return (
             <div className="container-fluid h-100">
-                <div className="mx-auto my-5 col col-sm-6 col-md-6 col-lg-4 col-xl-3 border border-dark form-container rounded shadow p-3 mb-5 bg-white rounded bg-transparent">
+                <div className="mx-auto my-2 col col-sm-6 col-md-6 col-lg-4 col-xl-3 border border-dark form-container rounded shadow p-3 mb-5 bg-white rounded bg-transparent">
                     <form method="POST" action="/EDITAR OBRA">
-                        <Typography align="center" variant="h5">Obra</Typography>
+                        <Typography 
+                        align="center" 
+                        variant="h5"
+                        className="my-2">Obra</Typography>
                         <div class="form-group">
                             <FormControl className="w-100">
                                 <TextField
@@ -103,6 +118,7 @@ export default class ConsultaObraForm extends Component {
                             <FormControl className="w-100">
                                 <InputLabel htmlFor="age-native-helper">Nivel</InputLabel>
                                 <NativeSelect name="nivel" onChange={this.onChange}>
+                                    <option></option>
                                     <option value="Semillero">Semillero</option>
                                     <option value="Preorquesta">Preorquesta</option>
                                     <option value="Orquesta">Orquesta</option>
@@ -110,20 +126,9 @@ export default class ConsultaObraForm extends Component {
                             </FormControl>
                         </div>
 
-                        <div class="form-group">
-                            <FormControl className="w-100">
-                                <TextField
-                                    id="outlined-basic"
-                                    label="Descripción"
-                                    variant="outlined"
-                                    name="descripcion"
-                                    onChange={this.onChange} />
-                            </FormControl>
-                        </div>
-
                         <div className="form-check text-center">
                             <label className="form-check-label">
-                                <input name="esArreglo" type="checkbox" className="form-check-input" onChange={this.onChange} />
+                                <input id="esArregloCb" name="esArreglo" type="checkbox" className="form-check-input" onChange={this.onChange} />
                             </label>
                             <small id="helpId" className="form-text text-muted pt-2">Es arreglo</small>
                         </div>
@@ -134,6 +139,7 @@ export default class ConsultaObraForm extends Component {
                                 color="primary"
                                 startIcon={<SearchIcon />}
                                 component={Link} to={`/tabla/obra/${this.state.nombre}/${this.state.compositoropt}/${this.state.tonalidadopt}/${this.state.nivel}/${this.state.esArreglo}`}
+                                className="w-100"
                             >
                                 Buscar
                               </Button>
@@ -144,7 +150,8 @@ export default class ConsultaObraForm extends Component {
                         <Button
                             variant="contained"
                             color="primary"
-                            component={Link} to={`/`}>
+                            component={Link} to={`/`}
+                            >
                             Home
                          </Button>
                     </div>

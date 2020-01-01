@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import { sizing } from '@material-ui/system';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
@@ -23,21 +24,29 @@ export default class ConsultaCompositorForm extends Component {
 
     async componentDidMount() {
 
+        let data = [{}];
         fetch("/api/pais/*")
             .then(res => {
                 return res.json()
             })
             .then(paises => {
-                this.setState({ pais: paises })
+                paises.forEach(element => {
+                    data = [...data, element]
+                });
+                this.setState({ pais: data })
             });
 
+        let data_1 = [{}];
         fetch("/api/periodo/*")
             .then(res => {
                 return res.json()
             })
             .then(periodos => {
-                console.log(periodos);
-                this.setState({ periodo: periodos })
+                periodos.forEach(e => {
+                    data_1 = [...data_1, e]
+                });
+
+                this.setState({ periodo: data_1 })
             });
 
     }
@@ -62,20 +71,22 @@ export default class ConsultaCompositorForm extends Component {
     }
 
     render() {
+
         return (
             <div className="container-fluid h-100">
-                <div className="mx-auto my-5 col col-sm-6 col-md-6 col-lg-4 col-xl-3 border border-dark form-container rounded shadow p-3 mb-5 bg-white rounded bg-transparent">
+                <div className="mx-auto my-2 col col-sm-6 col-md-6 col-lg-4 col-xl-3 border border-dark form-container rounded shadow p-3 mb-5 bg-white rounded bg-transparent">
                     <form method="POST" action="/EDITAR COMPOSITOR">
                         <Typography align="center" variant="h5">Compositor</Typography>
 
                         <div class="form-group">
                             <FormControl className="w-100">
-                                <TextField 
-                                id="filled-basic" 
-                                label="Nombre" 
-                                variant="filled" 
-                                name="compositor"
-                                onChange={this.onChange}
+                                <TextField
+                                    id="filled-basic"
+                                    label="Nombre"
+                                    variant="filled"
+                                    name="compositor"
+                                    onChange={this.onChange}
+                                    className="my-2"
                                 />
                             </FormControl>
                         </div>
@@ -116,11 +127,12 @@ export default class ConsultaCompositorForm extends Component {
                         <div class="form-group mx-auto">
                             <FormControl className="w-100">
                                 <TextField
-                                id="outlined-basic" 
-                                label="Descripción" 
-                                variant="outlined"
-                                name="descripcion"
-                                onChange={this.onChange} />
+                                    id="outlined-basic"
+                                    label="Descripción"
+                                    variant="outlined"
+                                    name="descripcion"
+                                    onChange={this.onChange}
+                                />
                             </FormControl>
                         </div>
 
@@ -129,8 +141,8 @@ export default class ConsultaCompositorForm extends Component {
                                 variant="contained"
                                 color="primary"
                                 startIcon={<SearchIcon />}
-                                component={Link} to ={`/tabla/compositor/${this.state.compositor}/${this.state.paisopt}/${this.state.periodoopt}`}
-                            >
+                                component={Link} to={`/tabla/compositor/${this.state.compositor}/${this.state.paisopt}/${this.state.periodoopt}`}
+                                >
                                 Buscar
                         </Button>
                         </div>

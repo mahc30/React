@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,6 +12,8 @@ import Paper from '@material-ui/core/Paper';
 import EditSharpIcon from '@material-ui/icons/EditSharp';
 import DeleteForeverSharpIcon from '@material-ui/icons/DeleteForeverSharp';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button'
+import SearchIcon from '@material-ui/icons/Search';
 
 export default class TablaObra extends Component {
 
@@ -43,21 +47,22 @@ export default class TablaObra extends Component {
         });
 
         this.setState({ apiInfo: apei });
-        console.log(jsonStr);
       });
   }
 
-  
+
   editRow = id => {
-    //TODO redirect to Edit Composer 
+    this.props.history.push(`/add/true/false/${id}`)
   }
 
   delRow = id => {
-    const newRows= this.state.apiInfo.filter(e => e.ID !== id);
+    const newRows = this.state.apiInfo.filter(e => e.ID !== id);
     console.log("filtering")
     this.setState({
       apiInfo: newRows
     })
+
+    axios.post(`http://localhost:3001/api/obra/del/${id}`);
   }
 
   render() {
@@ -73,7 +78,16 @@ export default class TablaObra extends Component {
               <TableCell align="center">Nivel</TableCell>
               <TableCell align="center">Es Arreglo</TableCell>
               <TableCell align="center"></TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell align="right">
+                <Button
+                  variant="contained"
+                  startIcon={<SearchIcon />}
+                  component={Link} to={`/consulta`}
+                  className="bg-success"
+                >
+                  Consulta
+                              </Button>
+              </TableCell>
 
             </TableRow>
           </TableHead>
@@ -88,11 +102,11 @@ export default class TablaObra extends Component {
                 <TableCell align="center">{row.Compositor}</TableCell>
                 <TableCell align="center">{row.Tonalidad}</TableCell>
                 <TableCell align="center">{row.Nivel}</TableCell>
-                <TableCell align="center">{row.EsArreglo}</TableCell>
+                <TableCell align="center">{row.EsArreglo ? "Si" : "No"}</TableCell>
 
                 <TableCell>
                   <IconButton aria-label="Editar" onClick={() => { this.editRow(row.ID) }}>
-                    <EditSharpIcon color="primary"/>
+                    <EditSharpIcon color="primary" />
                   </IconButton>
                 </TableCell>
 

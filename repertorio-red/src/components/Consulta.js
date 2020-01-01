@@ -27,37 +27,19 @@ export default class Consulta extends Component {
     }
 
     render() {
-        if (this.state.checked) {
-            return (
-                <div>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={this.state.checked}
-                                color="primary"
-                                onChange={this.changeForm}
-                            />
-                        }
-                    />
-                    <ConsultaObraForm />
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={this.state.checked}
-                                color="primary"
-                                onChange={this.changeForm}
-                            />
-                        }
-                    />
-                    <ConsultaCompositorForm/>
-                </div>
-            )
-        }
-
+        return (
+            <div>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={this.state.checked}
+                            color="primary"
+                            onChange={this.changeForm}
+                        />
+                    }
+                />
+                {this.state.checked ? <ConsultaObraForm /> : <ConsultaCompositorForm />}
+            </div>
+        )
     }
 }
