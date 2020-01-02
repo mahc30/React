@@ -132,6 +132,7 @@ export default class ConsultaObraForm extends Component {
                             </label>
                             <small id="helpId" className="form-text text-muted pt-2">Es arreglo</small>
                         </div>
+                        
                         <div class="form-group w-100 text-center">
 
                             <Button

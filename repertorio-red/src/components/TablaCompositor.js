@@ -14,8 +14,9 @@ import DeleteForeverSharpIcon from '@material-ui/icons/DeleteForeverSharp';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
-import Axios from 'axios';
+import AddIcon from '@material-ui/icons/Add';
 
+// TODO parece que no se están agregando bien or something >.>
 export default class TablaCompositor extends Component {
 
   state = {
@@ -55,7 +56,7 @@ export default class TablaCompositor extends Component {
     this.setState({
       apiInfo: newRows
     })
-    
+
     axios.post(`http://localhost:3001/api/compositor/del/${id}`)
   }
 
@@ -65,20 +66,31 @@ export default class TablaCompositor extends Component {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>ID </TableCell>
               <TableCell align="center">Nombre</TableCell>
               <TableCell align="center">Pais</TableCell>
               <TableCell align="center">Periodo</TableCell>
               <TableCell align="center">Descripción</TableCell>
               <TableCell align="right"></TableCell>
+
               <TableCell align="right">
                 <Button
                   variant="contained"
                   startIcon={<SearchIcon />}
                   component={Link} to={`/consulta`}
-                  className="bg-success"
+                  className="bg-info"
                 >
                   Consulta
+                              </Button>
+              </TableCell>
+
+              <TableCell align="right">
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  component={Link} to={`/add/false/true/*`}
+                  className="bg-success"
+                >
+                  Agregar
                               </Button>
               </TableCell>
             </TableRow>
@@ -87,21 +99,18 @@ export default class TablaCompositor extends Component {
           <TableBody>
             {this.state.apiInfo.map(row => (
               <TableRow key={row.ID}>
-                <TableCell component="th" scope="row">
-                  {row.ID}
-                </TableCell>
                 <TableCell align="center">{row.Compositor}</TableCell>
                 <TableCell align="center">{row.Pais}</TableCell>
                 <TableCell align="center">{row.Periodo}</TableCell>
                 <TableCell align="justify">{row.Descripcion}</TableCell>
 
-                <TableCell>
+                <TableCell align="center">
                   <IconButton aria-label="Editar" onClick={() => { this.editRow(row.ID) }}>
                     <EditSharpIcon color="primary" />
                   </IconButton>
                 </TableCell>
 
-                <TableCell>
+                <TableCell align="right">
                   <IconButton aria-label="Eliminar" onClick={() => { this.delRow(row.ID) }}>
                     <DeleteForeverSharpIcon color="secondary" />
                   </IconButton>

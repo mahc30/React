@@ -10,7 +10,7 @@ export default class CompositorForm extends Component {
         type: this.props.type,
         pais: [],
         periodo: [],
-        compositor: "NA",
+        compositor: "",
         paisopt: "Afghanistan",
         periodoopt: "Antiguo",
         descripcion: ""

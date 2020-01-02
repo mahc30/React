@@ -10,9 +10,10 @@ export default class AddForm extends Component {
     state = {
         id: this.props.match.params.id,
         type: this.props.match.params.type === "true" ? true : false,
-        checked: this.props.match.params.checked === "true" ? true: false
+        checked: this.props.match.params.checked === "true" ? true : false
     }
-
+    //Checked = True: Obra Form - False : Compositor Form
+    //type = True : Agregar - False : Actualizar
     componentDidUpdate = () => {
         console.log(this.state);
     }
@@ -25,11 +26,20 @@ export default class AddForm extends Component {
 
     unHistory = () => {
 
-        if(this.state.checked){
-            this.props.history.push("/tabla/obra/*/*/*/*/*");
+        if (this.state.type) {
+            if (this.state.checked) {
+                this.props.history.push(`/add/true/true/*`);
+            } else {
+                this.props.history.push("/add/true/false/*");
+            }
         }else{
-            this.props.history.push("/tabla/compositor/*/*/*");
+            if (this.state.checked) {
+                this.props.history.push(`/tabla/obra/*/*/*/*/*`);
+            } else {
+                this.props.history.push("/tabla/compositor/*/*/*");
+            }
         }
+
     }
 
     render() {
@@ -38,13 +48,14 @@ export default class AddForm extends Component {
                 <FormControlLabel
                     control={
                         <Switch
+                            disabled={!this.state.type}
                             checked={this.state.checked}
                             color="primary"
                             onChange={this.changeForm}
                         />
                     }
                 />
-                {this.state.checked ? <ObraForm type={this.state.type} id={this.state.id} unHistory = {this.unHistory}/> : <CompositorForm type={this.state.type} id={this.state.id} unHistory = {this.unHistory}/>}
+                {this.state.checked ? <ObraForm type={this.state.type} id={this.state.id} unHistory={this.unHistory} /> : <CompositorForm type={this.state.type} id={this.state.id} unHistory={this.unHistory} />}
             </div>
         )
     }

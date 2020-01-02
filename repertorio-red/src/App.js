@@ -18,7 +18,6 @@ import addForm from './components/AddForm'
 // ------------------- Material UI imports --------------------
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import MusicNoteIcon from '@material-ui/icons/MusicNote';
 import PersonIcon from '@material-ui/icons/Person';
 import PageviewIcon from '@material-ui/icons/Pageview';
 import IconButton from '@material-ui/core/IconButton';
@@ -111,7 +110,7 @@ class App extends Component {
                       variant="contained"
                       color="primary"
                       startIcon={<PersonIcon />}
-                      component={Link} to="/add/true/*"
+                      component={Link} to="/add/true/true/*"
                     >
                       Obras / Compositores
                     </Button>

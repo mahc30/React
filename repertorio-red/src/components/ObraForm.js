@@ -67,13 +67,17 @@ export default class ObraForm extends Component {
         }
 
         if (this.state.type) {
-            axios.post("/api/post/add/obra", JSON.stringify(data));
+            axios.post("/api/post/add/obra", JSON.stringify(data))
+                .catch(e => {
+                    this.setState({nombre: ""})
+                })
         } else {
-            
-            axios.post(`/api/edit/obra/${this.state.id}`, JSON.stringify(data));
+
+            axios.post(`/api/edit/obra/${this.state.id}`, JSON.stringify(data))
+                .catch(e => {
+                    this.props.unHistory();
+                })
         }
-        console.log(this.state.id)
-        this.props.unHistory();
     }
 
     render() {
@@ -83,7 +87,7 @@ export default class ObraForm extends Component {
                     <form method="POST" action="/agregar/Obra">
                         <div className="form-group">
                             <div className="col align-self-center text-center">
-                                <Typography variant="h5"> {this.state.type? "Agregar " : "Actualizar "} Obra </Typography>
+                                <Typography variant="h5"> {this.state.type ? "Agregar " : "Actualizar "} Obra </Typography>
                             </div>
                         </div>
 
@@ -91,7 +95,7 @@ export default class ObraForm extends Component {
                             <div className="align-self-center">
                                 <input type="text" className="form-control" name="nombre" id="inst-name"
                                     aria-describedby="helpId" placeholder="Ejemplo: Himno de la Alegría"
-                                    required="required" onChange={this.onChange} />
+                                    required="required" onChange={this.onChange} value={this.state.nombre} />
                                 <small id="helpId" className="form-text text-muted">Nombre de la Obra</small>
                             </div>
                         </div>

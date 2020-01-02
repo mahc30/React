@@ -37,7 +37,7 @@ db.connect((err) => {
     console.log("Mysql connection successful");
 });
 
-// -------------------------- Queries to DB ------------------------ //
+// -------------------------- Basic Queries to DB ------------------------ //
 
 app.get("/api/:table/:column", (req, res) => {
 
@@ -48,10 +48,11 @@ app.get("/api/:table/:column", (req, res) => {
             console.log(err);
             return;
         }
-        console.log("Custom query succesful");
         res.json(result);
     });
 });
+
+// --------------- Custom Queries to DB --------------------
 
 app.get("/api/compositor/:nombre/:pais/:periodo", (req, res) => {
 
@@ -105,6 +106,7 @@ app.get("/api/compositor/:nombre/:pais/:periodo", (req, res) => {
 
 app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res) => {
 
+    console.log(req.params);
     let nombre = req.params.nombre || "*";
     let compositor = req.params.compositor || "*";
     let tonalidad = req.params.tonalidad || "*";
@@ -128,7 +130,7 @@ app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res)
     let c = 0;
 
     if (nombre !== "*") {
-        sql += `obra.Obra = '${nombre}'`
+        sql += `obra.Obra LIKE '%${nombre}%'`
         c++;
     }
 
@@ -156,15 +158,18 @@ app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res)
         sql += `obra.nivel = '${nivel}'`
     }
 
-    if(esArreglo !== "*"){
+    if (esArreglo !== "*") {
         sql += `obra.esArreglo = '${esArreglo}'`
-    }else{
+    }
+
+    //------- No parameters = No WHERE condition in sql
+    if (c === 0) {
         sql = sql.substring(0, sql.length - 6);
     }
 
     db.query(sql, (err, result) => {
         if (err) {
-            console.log(err);
+            console.log(err.sqlMessage, err.sql);
             return;
         }
 
@@ -173,6 +178,29 @@ app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res)
     });
 });
 
+// -------------------------- PDF ------------------------------------
+
+app.get("/api/obra/download/:id", (req, res) => {
+
+    let id = req.params.id;
+
+    let sql = `SELECT Obra, Nivel FROM obra WHERE ID = ${id}`;
+
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        let dir = `./Obras/${result[0].Nivel}/${result[0].Obra}/${result[0].Obra}.pdf`;
+        try {
+            res.download(dir);
+        }
+        catch (err) {
+            res.sendStatus(502);
+        }
+    });
+});
 
 // ---------------------------- HANDLE POST REQUESTS ----------------------------
 
@@ -210,13 +238,13 @@ app.post("/api/post/add/obra", (req, res) => {
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir);
             }
-            res.sendStatus(200);
+            res.sendStatus(500);
         });
     });
 });
 
 app.post("/api/post/add/compositor", (req, res) => {
-    let compositor = req.body.nombre;
+    let compositor = req.body.compositor;
     let pais = req.body.pais;
     let periodo = req.body.periodo;
     let descripcion = req.body.descripcion;
@@ -238,12 +266,13 @@ app.post("/api/post/add/compositor", (req, res) => {
             }
 
             sql = `INSERT INTO compositor (Compositor,Pais,Periodo,Descripcion) VALUES ('${compositor}',${idPais[0].ID},${idPeriodo[0].ID},'${descripcion}')`;
+
             db.query(sql, (err, result) => {
                 if (err) {
                     console.log(err);
                     return;
                 }
-                res.sendStatus(200);
+                res.sendStatus(500);
             });
         });
     });
@@ -272,8 +301,6 @@ app.post("/api/:table/del/:id", (req, res) => {
             console.log(result);
             let dir = `./Obras/${result[0].Nivel}/${result[0].Obra}`;
 
-            console.log(dir);
-
             deleteFolderRecursive(dir);
         })
     }
@@ -293,7 +320,7 @@ app.post("/api/:table/del/:id", (req, res) => {
 // ------------------ EDIT REG REQUESTS ------------------
 
 app.post("/api/edit/obra/:id", (req, res) => {
-    
+
     let id = req.params.id;
 
     let sql1 = `SELECT ID FROM compositor WHERE Compositor = '${req.body.compositor}'`;
@@ -319,12 +346,17 @@ app.post("/api/edit/obra/:id", (req, res) => {
 
         sql = `UPDATE obra SET ? WHERE ID = ${id} `;
 
+        let dir = `./Obras/${req.body.nivel}/${req.body.nombre}`;
+
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+        
         db.query(sql, data, (err, result) => {
             if (err) {
                 console.log(err);
                 return;
             }
-
             res.sendStatus(500);
         });
     });
