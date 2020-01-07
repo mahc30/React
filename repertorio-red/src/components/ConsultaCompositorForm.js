@@ -12,7 +12,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 export default class ConsultaCompositorForm extends Component {
 
-    //TODO: Redirect to Tables according to parameters
     state = {
         pais: [],
         periodo: [],

@@ -13,7 +13,6 @@ import axios from 'axios';
 
 export default class ConsultaObraForm extends Component {
 
-    //TODO: Redirect to Tables according to parameters
     state = {
         compositor: [""],
         tonalidad: [""],

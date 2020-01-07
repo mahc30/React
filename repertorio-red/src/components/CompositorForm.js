@@ -126,7 +126,7 @@ export default class CompositorForm extends Component {
                             <div className="form-group text-center">
                             <Button 
                             variant="contained" 
-                            className="bg-success text-white" 
+                            className="bg-success" 
                             component="span"
                             onClick={this.sendData}>
                               {this.state.type? "Agregar" : "Actualizar"}

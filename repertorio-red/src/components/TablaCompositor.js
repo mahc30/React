@@ -16,7 +16,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
-// TODO parece que no se están agregando bien or something >.>
 export default class TablaCompositor extends Component {
 
   state = {
