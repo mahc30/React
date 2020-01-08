@@ -1,3 +1,23 @@
+/* 
+Index
+1. Server Configuration
+2. MySQL Connection
+3. Queries to DB
+    - Root query
+    - Any TABLE any COLUMN query
+    - Customizable query for Composer Table
+    - Customizable query for any Obra
+4. PDF download
+5. INSERT 
+    - Add Obra
+    - Add Composer
+    - Delete any TABLE any COLUMN query
+6. EDIT 
+    - Edit obra
+    - Edit Composer
+7. Other functions
+    - deleteFolderRecursively()
+    */
 // ---------------- Server Configuration -------------------------------
 
 const express = require('express');
@@ -10,12 +30,8 @@ app.use(bodyParser.json({ type: 'application/x-www-form-urlencoded' }))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
-app.get("/api/helloWorld", (req, res) => {
-    res.send("Hello World");
-});
-
-app.listen(3001, () => {
-    console.log("Listening 3001");
+app.get("/", (req, res) => {
+    res.sendStatus(200);
 });
 
 // --------------------------- MySQL connection --------------------
@@ -37,7 +53,10 @@ db.connect((err) => {
     console.log("Mysql connection successful");
 });
 
-// -------------------------- Basic Queries to DB ------------------------ //
+// -------------------------- Queries to DB ------------------------ //
+app.get("/", (req, res) => {
+    res.sendStatus(200);
+});
 
 app.get("/api/:table/:column", (req, res) => {
 
@@ -51,8 +70,6 @@ app.get("/api/:table/:column", (req, res) => {
         res.json(result);
     });
 });
-
-// --------------- Custom Queries to DB --------------------
 
 app.get("/api/compositor/:nombre/:pais/:periodo", (req, res) => {
 
@@ -187,26 +204,22 @@ app.get("/api/obra/download/:id", (req, res) => {
     let sql = `SELECT Obra, Nivel FROM obra WHERE ID = ${id}`;
 
     db.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-            return;
+        if(err || result.length === 0){
+            res.sendStatus(500);
         }
-
+        else{
         let dir = `./Obras/${result[0].Nivel}/${result[0].Obra}/${result[0].Obra}.pdf`;
         try {
             res.download(dir);
-        }
-        catch (err) {
+        }catch (err) {
             res.sendStatus(502);
-        }
+        }}
     });
 });
 
-// ---------------------------- HANDLE POST REQUESTS ----------------------------
-
 // --------------- ADD REG REQUESTS ---------------------
 
-app.post("/api/post/add/obra", (req, res) => {
+app.post("/api/add/obra", (req, res) => {
     console.log(req.body);
     let obra = req.body.nombre;
     let compositor = req.body.compositor;
@@ -238,12 +251,12 @@ app.post("/api/post/add/obra", (req, res) => {
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir);
             }
-            res.sendStatus(500);
+            res.sendStatus(200);
         });
     });
 });
 
-app.post("/api/post/add/compositor", (req, res) => {
+app.post("/api/add/compositor", (req, res) => {
     let compositor = req.body.compositor;
     let pais = req.body.pais;
     let periodo = req.body.periodo;
@@ -272,7 +285,7 @@ app.post("/api/post/add/compositor", (req, res) => {
                     console.log(err);
                     return;
                 }
-                res.sendStatus(500);
+                res.sendStatus(200);
             });
         });
     });
@@ -413,3 +426,5 @@ const deleteFolderRecursive = function (path) {
         fs.rmdirSync(path);
     }
 };
+
+module.exports = app

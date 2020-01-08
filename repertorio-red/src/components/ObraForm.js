@@ -67,7 +67,7 @@ export default class ObraForm extends Component {
         }
 
         if (this.state.type) {
-            axios.post("/api/post/add/obra", JSON.stringify(data))
+            axios.post("/api/add/obra", JSON.stringify(data))
                 .catch(e => {
                     this.setState({nombre: ""})
                 })

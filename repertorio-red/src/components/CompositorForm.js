@@ -52,7 +52,7 @@ export default class CompositorForm extends Component {
         }
 
         if(this.state.type){
-            axios.post("http://localhost:3001/api/post/add/compositor", JSON.stringify(data));
+            axios.post("http://localhost:3001/api/add/compositor", JSON.stringify(data));
         }else{
             axios.post(`http://localhost:3001/api/edit/compositor/${this.props.id}`, JSON.stringify(data));
         }

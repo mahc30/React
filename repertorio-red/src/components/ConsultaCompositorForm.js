@@ -66,7 +66,7 @@ export default class ConsultaCompositorForm extends Component {
             descripcion: this.state.descripcion
         }
 
-        axios.post("http://localhost:3001/api/post/add/compositor", JSON.stringify(data));
+        axios.post("http://localhost:3001/api/add/compositor", JSON.stringify(data));
     }
 
     render() {
