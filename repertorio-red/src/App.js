@@ -2,14 +2,9 @@ import React, { Component, useState } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './App.css';
 import logo from './assets/images/red-logo.png'
-import tasks from './sample/task.json';
 
 // ------------- Import Components ----------------
-import Tasks from './components/Tasks';
-import TaskForm from './components/TaskForm';
 import Posts from './components/Posts'
-import CompositorForm from './components/CompositorForm';
-import ObraForm from './components/ObraForm';
 import Consulta from './components/Consulta';
 import TablaCompositor from './components/TablaCompositor'
 import TablaObra from './components/TablaObra'
@@ -25,42 +20,9 @@ import AppBar from '@material-ui/core/AppBar';
 import HomeIcon from '@material-ui/icons/Home';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Typography } from '@material-ui/core';
+import axios from 'axios';
 
 class App extends Component {
-
-  state = {
-    tasks: tasks
-  }
-
-  addTask = (title, description) => {
-    const newTask = {
-      title: title,
-      description: description,
-      id: this.state.tasks.length + 1
-    }
-
-    this.setState({
-      tasks: [...this.state.tasks, newTask]
-    })
-  }
-
-  deleteTask = (id) => {
-    const newTasks = this.state.tasks.filter(task => task.id !== id);
-    this.setState({
-      tasks: newTasks
-    })
-  }
-
-  checkDone = (id) => {
-    const newTasks = this.state.tasks.map(task => {
-      if (task.id === id) {
-        task.done = !task.done
-      }
-      return task;
-    })
-
-    this.setState({ tasks: newTasks })
-  }
 
   StyleCompleted() {
     return {
@@ -69,6 +31,33 @@ class App extends Component {
     }
   }
 
+  state = {
+    willAuth: false,
+    auth: "",
+    isAuth: false
+  }
+
+  validate = () => {
+    var url = `http://localhost:3001/admin/auth/${this.state.auth}`;
+    console.log("url: " + url);
+    axios.get(url)
+      .then(res => {
+        this.setState({ isAuth: true,
+        willAuth: false })
+        console.log("Auth!")
+      })
+      .catch(res =>{
+        this.setState({ isAuth: false})
+        console.log("fuckdup")
+      })
+  }
+
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+  
   render() {
     return <div>
       <Router>
@@ -86,7 +75,7 @@ class App extends Component {
               <div className="container mt-5">
                 <div className="row">
                   <div className="col text-center">
-                    <img style={this.StyleCompleted()} src={logo} alt="" srcset="" />
+                    <img style={this.StyleCompleted()} src={logo} alt="" srcSet="" />
                   </div>
                 </div>
 
@@ -128,8 +117,30 @@ class App extends Component {
                     </Button>
                   </div>
                 </div>
+
+                <div className="row">
+                  <div className="col py-5 my-4 text-right">
+                    <button onClick={() => this.setState({ willAuth: !this.state.willAuth })} style={
+                      {
+                        "background": "transparent",
+                        "border": "none!important",
+                        "fontSize": "0",
+                      }
+                    } />
+
+                    {this.state.willAuth ?
+                      (<div>
+                        <input name="auth" value={this.state.auth} onChange={this.onChange} />
+                        <button onClick={this.validate}>:)</button>
+                      </div>) :
+                      (<p></p>)
+                    }
+                  </div>
+                </div>
               </div>
+
             </div>
+
           </div>
 
         }}>

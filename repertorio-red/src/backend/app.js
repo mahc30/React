@@ -7,6 +7,7 @@ Index
     - Any TABLE any COLUMN query
     - Customizable query for Composer Table
     - Customizable query for any Obra
+    - Auth
 4. PDF download
 5. INSERT 
     - Add Obra
@@ -17,6 +18,7 @@ Index
     - Edit Composer
 7. Other functions
     - deleteFolderRecursively()
+    - String.hash()
     */
 // ---------------- Server Configuration -------------------------------
 
@@ -51,6 +53,10 @@ db.connect((err) => {
         return;
     }
     console.log("Mysql connection successful");
+});
+
+app.listen(3001, () => {
+    console.log("Listening 3001");
 });
 
 // -------------------------- Queries to DB ------------------------ //
@@ -193,6 +199,18 @@ app.get("/api/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo", (req, res)
         let parsedData = JSON.stringify(result);
         res.send(parsedData);
     });
+});
+
+// ------------------------ Auth ------------------------------
+
+app.get("/admin/auth/:pass", (req, res) => {
+    var password = req.params.pass;
+    
+    let sql = "SELECT password FROM auth";
+
+    db.query(sql, (err, result) => {
+        result[0].password == password.hashCode() ? res.sendStatus(200) : res.sendStatus(403)
+    })
 });
 
 // -------------------------- PDF ------------------------------------
@@ -427,4 +445,16 @@ const deleteFolderRecursive = function (path) {
     }
 };
 
+String.prototype.hashCode = function() {
+    var hash = 0;
+    if (this.length == 0) {
+        return hash;
+    }
+    for (var i = 0; i < this.length; i++) {
+        var char = this.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}
 module.exports = app

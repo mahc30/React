@@ -18,7 +18,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import Popover from '@material-ui/core/Popover';
-import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box'
 import AddIcon from '@material-ui/icons/Add';
 
