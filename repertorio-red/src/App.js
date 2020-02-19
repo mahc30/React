@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, Context } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './App.css';
 import logo from './assets/images/red-logo.png'
@@ -42,12 +42,14 @@ class App extends Component {
     console.log("url: " + url);
     axios.get(url)
       .then(res => {
-        this.setState({ isAuth: true,
-        willAuth: false })
+        this.setState({
+          isAuth: true,
+          willAuth: false
+        })
         console.log("Auth!")
       })
-      .catch(res =>{
-        this.setState({ isAuth: false})
+      .catch(res => {
+        this.setState({ isAuth: false })
         console.log("fuckdup")
       })
   }
@@ -57,7 +59,7 @@ class App extends Component {
       [e.target.name]: e.target.value
     })
   }
-  
+
   render() {
     return <div>
       <Router>
@@ -84,17 +86,17 @@ class App extends Component {
                 </div>
 
                 <div className="row border border-top-0 border-dark shadow-lg">
-                  <Box className="col text-center p-2" display="flex" bgcolor="primary.main">
+                  {this.state.isAuth ? <Box className="col text-center p-2" display="flex" bgcolor="primary.main">
                     <Typography className="h5 font-weight-bold mx-auto text-white"> Agregar </Typography>
-                  </Box>
+                  </Box> : <p></p>}
 
                   <Box className="col text-center p-2" display="flex" bgcolor="primary.main">
-                    <Typography className="h5 font-weight-bold mx-auto text-white"> Consultar </Typography>
+                    <Typography className="h5 font-weight-bold mx-auto text-white"> Buscar Obras </Typography>
                   </Box>
                 </div>
 
                 <div className="row rounded shadow">
-                  <div className="col-6 text-center p-3 border border-dark">
+                {this.state.isAuth ? <div className="col text-center p-3 border border-dark">
                     <Button
                       variant="contained"
                       color="primary"
@@ -103,9 +105,9 @@ class App extends Component {
                     >
                       Obras / Compositores
                     </Button>
-                  </div>
+                  </div> : <p/>}
 
-                  <div className="col-6 text-center border border-dark border-left-0">
+                  <div className="col text-center border border-dark">
                     <Button
                       variant="contained"
                       color="primary"
@@ -145,12 +147,11 @@ class App extends Component {
 
         }}>
         </Route>
-
         <Route path="/posts" component={Posts} />
         <Route path="/add/:checked/:type/:id" component={addForm} />
-        <Route path="/consulta" component={Consulta} />
-        <Route path="/tabla/compositor/:nombre/:pais/:periodo" component={TablaCompositor} />
-        <Route path="/tabla/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo" component={TablaObra} />
+        <Route path="/consulta" component={props => <Consulta {...props} isAuth={this.state.isAuth}></Consulta>} />
+        <Route path="/tabla/compositor/:nombre/:pais/:periodo" component={(props) => <TablaCompositor {...props} isAuth={this.state.isAuth} />} />
+        <Route path="/tabla/obra/:nombre/:compositor/:tonalidad/:nivel/:esArreglo" component={props => <TablaObra {...props} isAuth={this.state.isAuth} />} />
       </Router>
     </div >
   }

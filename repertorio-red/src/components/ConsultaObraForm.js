@@ -76,7 +76,12 @@ export default class ConsultaObraForm extends Component {
                         align="center" 
                         variant="h5"
                         className="my-2">Obra</Typography>
-                        <div class="form-group">
+                        <Typography 
+                        align="center" 
+                        variant="p"
+                        color="textSecondary"
+                        className="px-4 my-2">Dejar en blanco para ver todas las obras</Typography>
+                        <div className="form-group">
                             <FormControl className="w-100">
                                 <TextField
                                     id="filled-basic"
@@ -87,7 +92,7 @@ export default class ConsultaObraForm extends Component {
                             </FormControl>
                         </div>
 
-                        <div class="form-group">
+                        <div className="form-group">
                             <FormControl className="w-100">
                                 <InputLabel htmlFor="age-native-helper">Compositor</InputLabel>
                                 <NativeSelect name="compositoropt" onChange={this.onChange}>
@@ -100,7 +105,7 @@ export default class ConsultaObraForm extends Component {
                             </FormControl>
                         </div>
 
-                        <div class="form-group">
+                        <div className="form-group">
                             <FormControl className="w-100">
                                 <InputLabel htmlFor="age-native-helper">Tonalidad</InputLabel>
                                 <NativeSelect name="tonalidadopt" onChange={this.onChange}>
@@ -113,7 +118,7 @@ export default class ConsultaObraForm extends Component {
                             </FormControl>
                         </div>
 
-                        <div class="form-group">
+                        <div className="form-group">
                             <FormControl className="w-100">
                                 <InputLabel htmlFor="age-native-helper">Nivel</InputLabel>
                                 <NativeSelect name="nivel" onChange={this.onChange}>
@@ -132,7 +137,7 @@ export default class ConsultaObraForm extends Component {
                             <small id="helpId" className="form-text text-muted pt-2">Es arreglo</small>
                         </div>
                         
-                        <div class="form-group w-100 text-center">
+                        <div className="form-group w-100 text-center">
 
                             <Button
                                 variant="contained"

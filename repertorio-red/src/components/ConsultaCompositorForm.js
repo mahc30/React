@@ -77,7 +77,7 @@ export default class ConsultaCompositorForm extends Component {
                     <form method="POST" action="/EDITAR COMPOSITOR">
                         <Typography align="center" variant="h5">Compositor</Typography>
 
-                        <div class="form-group">
+                        <div className="form-group">
                             <FormControl className="w-100">
                                 <TextField
                                     id="filled-basic"
@@ -90,7 +90,7 @@ export default class ConsultaCompositorForm extends Component {
                             </FormControl>
                         </div>
 
-                        <div class="form-group">
+                        <div className="form-group">
                             <FormControl className="w-100">
                                 <InputLabel htmlFor="age-native-helper">Pais</InputLabel>
                                 <NativeSelect name="paisopt" onChange={this.onChange}>
@@ -106,7 +106,7 @@ export default class ConsultaCompositorForm extends Component {
                             </FormControl>
                         </div>
 
-                        <div class="form-group">
+                        <div className="form-group">
                             <FormControl className="w-100">
                                 <InputLabel htmlFor="age-native-helper">Periodo</InputLabel>
                                 <NativeSelect name="periodoopt" onChange={this.onChange}>
@@ -123,7 +123,7 @@ export default class ConsultaCompositorForm extends Component {
                             </FormControl>
                         </div>
 
-                        <div class="form-group mx-auto">
+                        <div className="form-group mx-auto">
                             <FormControl className="w-100">
                                 <TextField
                                     id="outlined-basic"

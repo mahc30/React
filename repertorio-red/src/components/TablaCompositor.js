@@ -102,6 +102,7 @@ export default class TablaCompositor extends Component {
                 <TableCell align="center">{row.Pais}</TableCell>
                 <TableCell align="center">{row.Periodo}</TableCell>
                 <TableCell align="justify">{row.Descripcion}</TableCell>
+                <TableCell align="justify"></TableCell>
 
                 <TableCell align="center">
                   <IconButton aria-label="Editar" onClick={() => { this.editRow(row.ID) }}>
@@ -109,11 +110,13 @@ export default class TablaCompositor extends Component {
                   </IconButton>
                 </TableCell>
 
-                <TableCell align="right">
+                <TableCell align="center">
                   <IconButton aria-label="Eliminar" onClick={() => { this.delRow(row.ID) }}>
                     <DeleteForeverSharpIcon color="secondary" />
                   </IconButton>
                 </TableCell>
+
+
               </TableRow>
             ))}
           </TableBody>

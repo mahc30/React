@@ -57,7 +57,6 @@ export default class TablaObra extends Component {
       });
   }
 
-
   editRow = id => {
     this.props.history.push(`/add/true/false/${id}`)
   }
@@ -118,19 +117,19 @@ export default class TablaObra extends Component {
                   component={Link} to={`/consulta`}
                   className="bg-info"
                 >
-                  Consulta
+                  Buscar
                               </Button>
               </TableCell>
 
               <TableCell align="right">
-                <Button
+                {this.props.isAuth ? <Button
                   variant="contained"
                   startIcon={<AddIcon />}
                   component={Link} to={`/add/true/true/*`}
                   className="bg-success"
                 >
                   Agregar
-                              </Button>
+                              </Button> : <p />}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -145,13 +144,8 @@ export default class TablaObra extends Component {
                 <TableCell align="center">{row.Nivel}</TableCell>
                 <TableCell align="center">{row.EsArreglo ? "Si" : "No"}</TableCell>
 
-                <TableCell>
-                  <IconButton aria-label="Editar" onClick={() => { this.editRow(row.ID) }}>
-                    <EditSharpIcon color="primary" />
-                  </IconButton>
-                </TableCell>
 
-                <TableCell>
+                <TableCell align="center">
                   <IconButton aria-label="Editar" onClick={() => { this.downloadPdf(row.ID) }}>
                     <GetAppIcon id={row.ID} color="primary" />
                   </IconButton>
@@ -176,10 +170,16 @@ export default class TablaObra extends Component {
                   </Popover>}
                 </TableCell>
 
+                <TableCell align="center">
+                  {this.props.isAuth ? <IconButton aria-label="Editar" onClick={() => { this.editRow(row.ID) }}>
+                    <EditSharpIcon color="primary" />
+                  </IconButton> : <p></p>}
+                </TableCell>
+
                 <TableCell align="right">
-                  <IconButton aria-label="Eliminar" onClick={() => { this.delRow(row.ID) }}>
+                  {this.props.isAuth ? <IconButton aria-label="Eliminar" onClick={() => { this.delRow(row.ID) }}>
                     <DeleteForeverSharpIcon color="secondary" />
-                  </IconButton>
+                  </IconButton> : <p />}
                 </TableCell>
               </TableRow>
             ))}

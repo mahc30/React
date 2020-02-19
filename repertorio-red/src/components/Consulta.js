@@ -20,7 +20,7 @@ export default class Consulta extends Component {
     render() {
         return (
             <div>
-                <FormControlLabel
+                {this.props.isAuth ? <FormControlLabel
                     control={
                         <Switch
                             checked={this.state.checked}
@@ -28,7 +28,8 @@ export default class Consulta extends Component {
                             onChange={this.changeForm}
                         />
                     }
-                />
+                /> : <p></p>}
+                
                 {this.state.checked ? <ConsultaObraForm /> : <ConsultaCompositorForm />}
             </div>
         )
